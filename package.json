@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "dotenv": "^16.4.7",
+    "i": "^0.3.7",
+    "mongodb": "^6.13.0",
+    "mongoose": "^8.10.1"
+  }
+}
