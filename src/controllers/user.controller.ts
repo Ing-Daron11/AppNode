@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import {UserModel, UserInputDTO} from "../models";
+import {UserInputDTO} from "../models";
+import {userService} from "../service";
 
 class UserController {
   public async create(req: Request, res: Response) {
@@ -8,8 +9,10 @@ class UserController {
       res.status(201).json(newUser);
       
     } catch (error) {
-      res.status(500).json({error});
-  
+      if(error instanceof ReferenceError){
+        res.status(400).json({error: error.message});
+        return;
+      }
     }
     
   }
