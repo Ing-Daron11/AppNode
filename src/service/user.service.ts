@@ -2,6 +2,7 @@ import { UserInputDTO, UserDocument, UserModel } from "../models";
 import bcrypt from "bcrypt";
 class UserService{
 
+    //Create 
     public async create(userInputDTO: UserInputDTO): Promise<UserDocument> {
         try {
             //esto es lo que puede devolver la funcion (UserDocument | null)
@@ -22,6 +23,19 @@ class UserService{
         }
     }
 
+    //Get All
+    public async getAll(): Promise<UserDocument[]> {
+        try {
+            const users: UserDocument[] = await UserModel.find();
+            return users;
+        } catch (error) {
+            throw error;
+            
+        }
+    }  
+
+
+// ----------------- Metodos auxiliares -----------------
     public async findbyEmail(email: string): Promise<UserDocument | null> {
         try {
             const user = await UserModel.findOne({email});

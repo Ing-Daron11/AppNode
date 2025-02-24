@@ -16,6 +16,20 @@ class UserController {
     }
     
   }
+  public async getAll(req: Request, res: Response) {
+    try {
+      const users = await userService.getAll();
+      res.status(200).json(users);
+      
+    } catch (error) {
+      if(error instanceof ReferenceError){
+        res.status(400).json({error: error.message});
+        return;
+      }
+      
+    }
+   
+  }
 
   public get(req: Request, res: Response) {
     res.status(200).send("User get");
@@ -29,9 +43,7 @@ class UserController {
     res.status(200).send("User deleted");
   }
 
-  public getAll(req: Request, res: Response) {
-    res.status(200).send("User get all");
-  }
+ 
 }
 
 export const userController = new UserController(); // Esto me exporta la clase UserController
