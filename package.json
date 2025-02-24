@@ -1,10 +1,28 @@
 {
+  "comment": "dev para desarrollo y start para produccion",
+  "name": "primer-app-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "author": "Daron mercado",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.13.4",
     "dotenv": "^16.4.7",
-    "i": "^0.3.7",
+    "express": "^4.21.2",
     "mongodb": "^6.13.0",
     "mongoose": "^8.10.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }
