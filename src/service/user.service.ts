@@ -32,7 +32,43 @@ class UserService{
             throw error;
             
         }
-    }  
+    }
+    
+    //Update
+    public async update(userInputDTO: UserInputDTO): Promise<UserDocument | null>{
+        try {
+            const user = await this.findbyEmail(userInputDTO.email);
+            if(user == null){
+                return null;
+            }
+            user.set(userInputDTO);
+            await user.save();
+            return user;
+        } catch (error) {
+            if(error instanceof ReferenceError){
+                throw new ReferenceError("User not found");
+            }
+            return null;   
+        }
+    }
+
+    //delete
+    public async delete(email: string): Promise<UserDocument | null>{
+        try {
+            const user = await this.findbyEmail(email);
+            if(user == null){
+                return null;
+            }
+            await user.deleteOne();
+            return user;
+        } catch (error) {
+            if(error instanceof ReferenceError){
+                throw new ReferenceError("User not found");
+            }
+            return null;
+        }  
+    }
+
 
 
 // ----------------- Metodos auxiliares -----------------
