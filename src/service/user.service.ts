@@ -1,4 +1,4 @@
-import { UserInputDTO, UserDocument, UserModel } from "../models";
+import { UserInputDTO, UserDocument, UserModel, UserLogin, UserResponse, UserInputDTOUpdate } from "../models";
 import bcrypt from "bcrypt";
 class UserService{
 
@@ -35,7 +35,7 @@ class UserService{
     }
     
     //Update
-    public async update(userInputDTO: UserInputDTO): Promise<UserDocument | null>{
+    public async update(userInputDTO: UserInputDTOUpdate): Promise<UserDocument | null>{
         try {
             const user = await this.findbyEmail(userInputDTO.email);
             if(user == null){
@@ -82,6 +82,38 @@ class UserService{
         }
     }
 
+    //Login
+    public async login(userLogin: UserLogin): Promise<UserResponse | undefined>{
+        try {
+            const usrerExis: UserDocument | null = await this.findbyEmail(userLogin.email);
+            if (usrerExis == null){
+                throw new ReferenceError("User not authorized");
+            }
+            
+            const isPasswordValid: boolean = await bcrypt.compare(userLogin.password, usrerExis.password);
+                return{
+                    user:{
+                        name: usrerExis.name || '',
+                        email: usrerExis.email,
+                        roles: ["admin"]
+                    },
+                    message:{
+                        contest: "Autorizado!",
+                        code: "200"
+                    }
+                }
+            
+           
+            
+        } catch (error) {
+            
+        }
+    }
+        
+
+
 }
+
+
 
 export const userService = new UserService();

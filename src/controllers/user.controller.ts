@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {UserInputDTO} from "../models";
+import {UserInputDTO, UserLogin} from "../models";
 import {userService} from "../service";
 
 class UserController {
@@ -10,7 +10,7 @@ class UserController {
       
     } catch (error) {
       if(error instanceof ReferenceError){
-        res.status(400).json({error: error.message});
+        res.status(400).json({error: (error as any).message});
         return;
       }
     }
@@ -23,7 +23,7 @@ class UserController {
       
     } catch (error) {
       if(error instanceof ReferenceError){
-        res.status(400).json({error: error.message});
+        res.status(400).json({error: (error as any).message});
         return;
       }
       
@@ -63,6 +63,15 @@ class UserController {
     res.status(200).send("User get");
   }
 
+  public async login(req: Request, res: Response) {
+    try {
+      const resObj = await userService.login(req.body as UserLogin);
+      res.status(200).send("User login");
+    } catch (error) {
+      //***Not authorized */
+      res.status(500).json(error);
+    }
+  }
   
 
   

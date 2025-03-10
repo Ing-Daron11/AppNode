@@ -7,6 +7,30 @@ export interface UserInputDTO {
     password: string
 }
 
+export interface UserInputDTOUpdate {
+    name: string; 
+    email: string
+}
+
+export interface UserLogin {
+    email: string
+    password: string
+}
+
+export interface UserResponse {
+    user?:{
+        email: string
+        roles: string[]
+        name: string
+    },
+    
+    message: {
+        contest: string,
+        code: string,
+    }
+        
+}
+
 export interface UserDocument extends UserInputDTO, mongoose.Document{
     createdAt: Date,
     updatedAt:Date,
