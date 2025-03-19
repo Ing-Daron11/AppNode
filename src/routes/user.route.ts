@@ -1,10 +1,20 @@
-import  { Request, Response, Router } from 'express';
-import { userController } from '../controllers';
+import { Request, Response, Router } from "express";
+import { userController } from "../controllers";
+import { auth, validateSchema } from "../middlewares";
+import { userSchema } from "../schemas";
 
-export const userRouter = Router(); // Create a new router
+export const userRouter = Router();
 
-userRouter.get("/", userController.get);
-userRouter.post("/", userController.create);
-userRouter.put("/", userController.update);
-userRouter.delete("/", userController.delete);
-userRouter.get("/all", userController.getAll);
+userRouter.get("/", userController.getAll);
+userRouter.post("/",validateSchema(userSchema),userController.create);
+userRouter.get("/profile", auth, userController.get);
+
+userRouter.get("/:id", userController.get);
+userRouter.put("/:id", userController.update);
+userRouter.delete("/:id",userController.delete);
+userRouter.post("/login", userController.login);
+
+/*
+userRouter.get("/", (req: Request, res: Response) => {
+    res.send("Get all users");
+})*/

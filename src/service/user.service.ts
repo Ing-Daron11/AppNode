@@ -1,5 +1,8 @@
 import { UserInputDTO, UserDocument, UserModel, UserLogin, UserResponse, UserInputDTOUpdate } from "../models";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+
 class UserService{
 
     //Create 
@@ -95,7 +98,8 @@ class UserService{
                     user:{
                         name: usrerExis.name || '',
                         email: usrerExis.email,
-                        roles: ["admin"]
+                        roles: ["admin"],
+                        token: this.generateToken(usrerExis.email)
                     },
                     message:{
                         contest: "Autorizado!",
@@ -107,6 +111,16 @@ class UserService{
             
         } catch (error) {
             
+        }
+    }
+
+
+    public generateToken(email: string): string{
+        try {
+            return jwt.sign({user: {email}}, process.env.JWT_SECRET || "secret", 
+                {expiresIn: "10m"});
+        } catch (error) {
+            throw new Error("Token generation failed");
         }
     }
         
