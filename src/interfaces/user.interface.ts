@@ -8,6 +8,9 @@ export interface UserInput {
 export interface UserInputUpdate {
     name: string,
     email: string
+    role: string,
+    password: string
+
 }
 
 export interface UserLogin {

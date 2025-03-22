@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserDocument} from '../models';
-import { UserInput, UserLogin } from '../interfaces';
+import { UserInput, UserInputUpdate, UserLogin } from '../interfaces';
 import { userService } from "../services";
 import { AuthError } from "../exceptions";
 
@@ -43,7 +43,7 @@ class Usercontroller {
     public async update (req: Request, res: Response) {
         try {
             const id: string = req.params.id;
-            const user: UserDocument | null = await userService.update(id, req.body as UserInput);
+            const user: UserDocument | null = await userService.update(id, req.body as UserInputUpdate);
             if(user === null){
                 res.status(404).json({message: `User with id ${id} not found`})
                 return;
