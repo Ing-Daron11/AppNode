@@ -60,13 +60,19 @@ class UserService {
                 throw new Error("Invalid role");
             }
 
+            //Validación extra para rehasear la password si se actualiza.
+            if (userInput.password && !userInput.password.startsWith("$2b$")) {
+                userInput.password = await bcrypt.hash(userInput.password, 10);
+            }
+
             const user: UserDocument | null = await UserModel.findOneAndUpdate(
                 { _id: id },
                 userInput,
                 { new: true }
             );
 
-            if (user) user.password = "";
+            if (user) 
+                user.password = "";
             return user;
         } catch (error) {
             throw error;
@@ -83,13 +89,16 @@ class UserService {
 
     public async login(userLogin: UserLogin): Promise<UserLoginResponse | undefined> {
         try {
+            console.log("Inicio de sesión", userLogin); //También para depurar
             const userExists: UserDocument | null = await this.findByEmail(userLogin.email);
             if (!userExists) {
+                console.log("Usuario no encontrado"); //Depuración
                 throw new AuthError("Not Authorized");
             }
 
             const isMatch: boolean = await bcrypt.compare(userLogin.password, userExists.password);
             if (!isMatch) {
+                console.log("Contraseña incorrecta, pero si se encontro el usuario"); //Esta vuelta es solo para depurar
                 throw new AuthError("Not Authorized");
             }
 
