@@ -1,12 +1,12 @@
 export enum ComputerCategory {
-    Gamer = "Gamer",
-    Oficina = "Oficina",
-    Diseño = "Diseño",
-    Servidor = "Servidor"
+    GAMER = "Gamer",
+    OFFICE = "Office",
+    DESIGN = "Design",
+    SERVER = "Server"
 }
 
 export enum ComputerStatus {
-    Available = "available",
-    Rented = "rented",
-    Maintenance = "maintenance"
+    AVAILABLE = "available",
+    RENTED = "rented",
+    MAINTENANCE = "maintenance"
 }
