@@ -131,3 +131,5 @@ class ComputerService {
         }
     }
 }
+
+export const computerService = new ComputerService();
