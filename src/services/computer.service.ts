@@ -54,6 +54,7 @@ class ComputerService {
         }
     }
 
+    // falta revisar si funciona todo bien con la categoria con enums
     public async getByCategory(category: ComputerCategory): Promise<ComputerDocument[] | null> {
         try {
             if (!Object.values(ComputerCategory).includes(category)) {
@@ -116,9 +117,15 @@ class ComputerService {
 
     public async delete(id: string): Promise<ComputerDocument | null> {
         try {
-            const computer = await ComputerModel.findByIdAndDelete(id);
+            const computer = await ComputerModel.findById(id);
             if (!computer) throw new Error("Computer not found");
-            return computer;
+
+            // No permitir eliminar un computador alquilado
+            if (computer.status === ComputerStatus.RENTED) {
+                throw new ReferenceError("Cannot delete a rented computer.");
+            }
+
+            return await ComputerModel.findByIdAndDelete(id);
         } catch (error) {
             throw new Error(`Error deleting computer by id ${id} ${error}`);
         }
