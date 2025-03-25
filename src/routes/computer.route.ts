@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { computerController } from "../controllers";
-import { auth } from "../middlewares";
+import { computerSchema } from "../schemas";
+import { auth, validateSchema } from "../middlewares";
 
 export const computerRouter = Router();
 
