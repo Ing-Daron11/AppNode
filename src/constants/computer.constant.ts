@@ -6,7 +6,7 @@ export enum ComputerCategory {
 }
 
 export enum ComputerStatus {
-    AVAILABLE = "available",
-    RENTED = "rented",
-    MAINTENANCE = "maintenance"
+    AVAILABLE = "Available",
+    RENTED = "Rented",
+    MAINTENANCE = "Maintenance"
 }
