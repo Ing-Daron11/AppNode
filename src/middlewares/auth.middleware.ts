@@ -30,7 +30,8 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 
 export const authorizeRole = (requiredRole: string) => {
     return (req: Request, res: Response, next: NextFunction): void => {
-        const user = req.body.loggedUser;
+        const user = req.body.loggedUser.user;
+        console.log("Usuario autenticado:", req.body.loggedUser);
 
         if (!user) {
             res.status(401).json("Unauthorized");
@@ -38,6 +39,7 @@ export const authorizeRole = (requiredRole: string) => {
         }
 
         if (user.role !== requiredRole) {
+            console.log(`Intento de acceso con rol: ${user.role}, requerido: ${requiredRole}`);
             res.status(403).json("Forbidden: Insufficient permissions");
             return;
         }

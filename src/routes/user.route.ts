@@ -5,7 +5,7 @@ import { userSchema } from "../schemas";
 
 export const userRouter = Router();
 
-userRouter.get("/", auth, authorizeRole("ADMIN"), userController.getAll); //Protegida
+userRouter.get("/", auth, authorizeRole('ADMIN'), userController.getAll); //Protegida
 userRouter.post("/", auth, authorizeRole("ADMIN") ,validateSchema(userSchema),userController.create); //Protegida
 userRouter.get("/profile", auth, userController.get); //No protegida
 //Tuve que mover este endpoint arriba de /:id porque sino no funcionaba, 
