@@ -29,13 +29,19 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const authorizeRole = (requiredRole: string) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, res: Response, next: NextFunction): void => {
         const user = req.body.loggedUser;
 
-        if (!user || user.role !== requiredRole) {
-            return res.status(403).json("Forbidden: Insufficient permissions");
+        if (!user) {
+            res.status(401).json("Unauthorized");
+            return;
         }
 
-        next();
+        if (user.role !== requiredRole) {
+            res.status(403).json("Forbidden: Insufficient permissions");
+            return;
+        }
+
+        next(); //Si llega hasta acá, el usuario está autorizado
     }
 }
