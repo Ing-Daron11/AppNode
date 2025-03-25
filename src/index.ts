@@ -1,7 +1,7 @@
 //let express = require("express");
 import express, {Express, Request, Response} from 'express';
 import dotenv from 'dotenv';
-import {userRouter, postRouter} from './routes';
+import {userRouter, postRouter, computerRouter, rentalRouter} from './routes';
 import { db } from "./lib/connectionDB";
 
 dotenv.config();
@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended:true }))
 
 app.use('/user', userRouter);
+app.use('/computer', computerRouter);
+app.use('/rental', rentalRouter)
+
 
 app.get('/', (req: Request, res: Response)=>{
     res.send("Hello World");

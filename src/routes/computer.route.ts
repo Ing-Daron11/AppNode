@@ -1,25 +1,31 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import { computerController } from "../controllers";
-import { auth } from "../middlewares";
+import { computerSchema } from "../schemas";
+import { auth, validateSchema } from "../middlewares";
 
-                                                                                                                                                                                                                              
-const router = Router();
+export const computerRouter = Router();
+
+// Ruta para obtener todos los computadores
+computerRouter.get("/", auth, computerController.findAll);
 
 // Ruta para crear un computador
-// falta validación admin
-router.post("/", auth, computerController.create);
-// Ruta para obtener todos los computadores
-router.get("/", auth, computerController.findAll);
-// Ruta para obtener un computador por id
-router.get("/:id", auth, computerController.getById);
+// Falta validación admin
+computerRouter.post("/", auth, computerController.create);
+
+// Ruta para obtener un computador por ID
+computerRouter.get("/:id", auth, computerController.getById);
+
 // Ruta para obtener computadores por categoría
-router.get("/category/:category", auth, computerController.getByCategory);
+computerRouter.get("/category/:category", auth, computerController.getByCategory);
+
 // Ruta para actualizar un computador
-// falta validación admin
-router.put("/:id", auth, computerController.update);
+// Falta validación admin
+computerRouter.put("/:id", auth, computerController.update);
+
 // Ruta para actualizar el estado de un computador
-// falta validación admin
-router.patch("/:id/status", auth, computerController.updateStatus);
+// Falta validación admin
+computerRouter.patch("/:id/status", auth, computerController.updateStatus);
+
 // Ruta para eliminar un computador
-// falta validación admin
-router.delete("/:id", auth, computerController.delete);
+// Falta validación admin
+computerRouter.delete("/:id", auth, computerController.delete);
