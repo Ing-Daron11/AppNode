@@ -14,7 +14,7 @@ export interface ComputerDocument extends mongoose.Document {
 const computerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     category: { type: String, enum: Object.values(ComputerCategory), required: true },    
-    status: { type: String, required: true, enum: Object.values(ComputerStatus), default: "available" },
+    status: { type: String, required: true, enum: Object.values(ComputerStatus), default: "Available" },
     pricePerDay: { type: Number, required: true },
 }, { timestamps: true, collection: "computers" });
 

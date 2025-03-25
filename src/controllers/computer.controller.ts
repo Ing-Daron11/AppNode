@@ -6,7 +6,10 @@ import { ComputerCategory, ComputerStatus } from "../constants";
 class ComputerController {
     public async create(req: Request, res: Response): Promise<void> {
         try {
-            const computerData: ComputerInput = req.body;
+
+            const { name, category, pricePerDay } = req.body;
+
+            const computerData: ComputerInput = { name, category, pricePerDay };
 
             // Validar que la categoría es válida
             if (!Object.values(ComputerCategory).includes(computerData.category)) {
@@ -21,7 +24,7 @@ class ComputerController {
             if (error instanceof ReferenceError) {
                 res.status(400).json({ message: "Computer already exists" });
             }
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error"+error });
         }
     }
 
