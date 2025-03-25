@@ -13,7 +13,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
         //console.log("Token: "+token);
         token = token.replace("Bearer ", "");
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
-        req.body.loggedUser = decoded;
+        req.body.loggedUser = decoded; //Guardo el usuario decodificado en el body de la request 
         console.log(decoded);
         req.params.id = decoded.user.id;
         next();
@@ -25,4 +25,17 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
         res.status(401).json("Not Authorized");
     }
 
+
+}
+
+export const authorizeRole = (requiredRole: string) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const user = req.body.loggedUser;
+
+        if (!user || user.role !== requiredRole) {
+            return res.status(403).json("Forbidden: Insufficient permissions");
+        }
+
+        next();
+    }
 }
