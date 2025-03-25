@@ -1,6 +1,6 @@
 export interface RentalInput {
-    device: string; // ObjectId de Computer
-    user: string; // ObjectId de User
+    computerId: string; // ObjectId de Computer
+    userId: string; // ObjectId de User
     quantity: number;
     timeLimit: number;
     initDate: Date;
@@ -8,8 +8,8 @@ export interface RentalInput {
 }
 
 export interface RentalInputUpdate {
-    device?: string;
-    user?: string;
+    computerId?: string;
+    userId?: string;
     quantity?: number;
     timeLimit?: number;
     initDate?: Date;
@@ -19,8 +19,8 @@ export interface RentalInputUpdate {
 
 export interface RentalResponse {
     id: string;
-    device: string;
-    user: string;
+    computerId: string;
+    userId: string;
     quantity: number;
     timeLimit: number;
     initDate: Date;

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 export interface RentalDocument extends mongoose.Document {
-    device: mongoose.Types.ObjectId; // Relación con Computer
-    user: mongoose.Types.ObjectId; // Relación con User
+    computerId: mongoose.Types.ObjectId; // Relación con Computer
+    userId: mongoose.Types.ObjectId; // Relación con User
     quantity: number;
     timeLimit: number;
     initDate: Date;
@@ -13,8 +13,8 @@ export interface RentalDocument extends mongoose.Document {
 }
 
 const rentalSchema = new mongoose.Schema({
-    device: { type: mongoose.Schema.Types.ObjectId, ref: "Computer", required: true },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    computerId: { type: mongoose.Schema.Types.ObjectId, ref: "Computer", required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     quantity: { type: Number, required: true },
     timeLimit: { type: Number, required: true },
     initDate: { type: Date, required: true },
