@@ -128,7 +128,7 @@ class UserService {
                     }
                 },
                 process.env.JWT_SECRET || "secret",
-                { expiresIn: "10m" }
+                { expiresIn: "60m" }
             );
         } catch (error) {
             throw error;
