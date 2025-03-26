@@ -6,25 +6,25 @@ import { ComputerCategory, ComputerStatus } from "../constants";
 class ComputerController {
     public async create(req: Request, res: Response): Promise<void> {
         try {
-
             const { name, category, pricePerDay } = req.body;
 
-            const computerData: ComputerInput = { name, category, pricePerDay };
-
+            if (!name || !category || !pricePerDay) {
+                res.status(400).json({ message: "All fields must be completed" });
+                return;
+            }
             // Validar que la categoría es válida
-            if (!Object.values(ComputerCategory).includes(computerData.category)) {
+
+            if (!Object.values(ComputerCategory).includes(category as ComputerCategory)) {
                 res.status(400).json({
                     message: `Invalid category. Allowed values: ${Object.values(ComputerCategory).join(", ")}`,
                 });
+                return;
             }
 
-            const computer = await computerService.create(computerData);
+            const computer = await computerService.create({ name, category, pricePerDay });
             res.status(201).json(computer);
         } catch (error) {
-            if (error instanceof ReferenceError) {
-                res.status(400).json({ message: "Computer already exists" });
-            }
-            res.status(500).json({ message: "Internal server error"+error });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 
@@ -43,10 +43,11 @@ class ComputerController {
             const computer = await computerService.getById(computerId);
             if (!computer) {
                 res.status(404).json({ message: "Computer not found" });
+                return;
             }
             res.status(200).json(computer);
         } catch (error) {
-            res.status(500).json({ message: "Internal server error " + error });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 
@@ -57,6 +58,7 @@ class ComputerController {
                 res.status(400).json({
                     message: `Invalid category. Allowed values: ${Object.values(ComputerCategory).join(", ")}`,
                 });
+                return;
             }
             const computers = await computerService.getByCategory(category as ComputerCategory);
             res.status(200).json(computers);
@@ -68,25 +70,40 @@ class ComputerController {
     public async update(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
-            const computerData: ComputerInputUpdate = req.body;
+            const existingComputer = await computerService.getById(id);
 
+            if (!existingComputer) {
+                res.status(404).json({ message: "Computer not found" });
+                return;
+            }
+    
+            if (existingComputer.status === ComputerStatus.RENTED) {
+                res.status(400).json({ message: "Cannot update a rented computer." });
+                return;
+            }
+
+            const computerData: ComputerInputUpdate = req.body;
             // Validar que la categoría es válida
+
             if (computerData.category && !Object.values(ComputerCategory).includes(computerData.category)) {
                 res.status(400).json({
                     message: `Invalid category. Allowed values: ${Object.values(ComputerCategory).join(", ")}`,
                 });
+                return;
+            }
+
+            if (computerData.status == ComputerStatus.RENTED) {
+                res.status(400).json({ message: "Cannot update a rented computer." });
+                return;
             }
 
             const computer = await computerService.update(id, computerData);
             if (!computer) {
                 res.status(404).json({ message: "Computer not found" });
+                return;
             }
             res.status(200).json(computer);
-        }
-        catch (error) {
-            if (error instanceof ReferenceError) {
-                res.status(400).json({ message: error.message });
-            }
+        } catch (error) {
             res.status(500).json({ message: "Internal server error: " + error });
         }
     }
@@ -95,24 +112,22 @@ class ComputerController {
         try {
             const { id } = req.params;
             const { status } = req.body;
-
             // Validar que el estado es válido
+
             if (!Object.values(ComputerStatus).includes(status as ComputerStatus)) {
                 res.status(400).json({
                     message: `Invalid status. Allowed values: ${Object.values(ComputerStatus).join(", ")}`,
                 });
+                return;
             }
 
             const computer = await computerService.updateStatus(id, status as ComputerStatus);
             if (!computer) {
                 res.status(404).json({ message: "Computer not found" });
+                return;
             }
             res.status(200).json(computer);
-        }
-        catch (error) {
-            if (error instanceof ReferenceError) {
-                res.status(400).json({ message: error.message });
-            }
+        } catch (error) {
             res.status(500).json({ message: "Internal server error: " + error });
         }
     }
@@ -120,16 +135,21 @@ class ComputerController {
     public async delete(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
-            const computer = await computerService.delete(id);
-            if (!computer) {
+
+            const existingComputer = await computerService.getById(id);
+            if (!existingComputer) {
                 res.status(404).json({ message: "Computer not found" });
+                return;
             }
-            res.status(200).json("Computer: "+computer+" deleted");
-        }
-        catch (error) {
-            if (error instanceof ReferenceError) {
-                res.status(400).json({ message: error.message });
+
+            if (existingComputer.status === ComputerStatus.RENTED) {
+                res.status(400).json({ message: "Cannot delete a rented computer." });
+                return;
             }
+
+            const computer = await computerService.delete(id);
+            res.status(200).json({ message: "Computer deleted successfully" });
+        } catch (error) {
             res.status(500).json({ message: "Internal server error: " + error });
         }
     }
