@@ -1,8 +1,10 @@
 //let express = require("express");
 import express, {Express, Request, Response} from 'express';
 import dotenv from 'dotenv';
-import {userRouter, postRouter, computerRouter, rentalRouter} from './routes';
+import {userRouter, computerRouter, rentalRouter} from './routes';
 import { db } from "./lib/connectionDB";
+import { VercelRequest, VercelResponse } from '@vercel/node';
+
 
 dotenv.config();
 
@@ -12,24 +14,20 @@ const port: number = process.env.PORT as any || 3000;
 app.use(express.json()); 
 app.use(express.urlencoded({ extended:true }))
 
+//rutas para los endpoints
 app.use('/user', userRouter);
 app.use('/computer', computerRouter);
 app.use('/rental', rentalRouter)
 
-
-app.get('/', (req: Request, res: Response)=>{
-    res.send("Hello World");
+app.get("/", (req, res) => {
+    res.json({ message: "¡Servidor funcionando en Vercel!" });
 });
 
-app.get('/error', (req: Request, res: Response)=>{
-    res.status(500).send("Hello World");
-});
 
-app.get('/notfound', (req: Request, res: Response)=>{
-    res.status(404).send("Hello World");
-});
 db.then( () =>
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     } )
 );
+
+export default app;

@@ -14,8 +14,10 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
         token = token.replace("Bearer ", "");
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
         req.body.loggedUser = decoded; //Guardo el usuario decodificado en el body de la request 
-        console.log(decoded);
-        req.params.id = decoded.user.id;
+        // console.log(decoded);
+        // console.log("Authenticated User:", req.body.loggedUser);
+        // req.params.id = decoded.user.id;
+        // console.log(req.params.id)
         next();
     } catch (error) {
         if (error instanceof TokenExpiredError){

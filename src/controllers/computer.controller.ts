@@ -33,20 +33,20 @@ class ComputerController {
             const computers = await computerService.findAll();
             res.status(200).json(computers);
         } catch (error) {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 
     public async getById(req: Request, res: Response): Promise<void> {
         try {
-            const { id } = req.params;
-            const computer = await computerService.getById(id);
+            const computerId = req.params.id;
+            const computer = await computerService.getById(computerId);
             if (!computer) {
                 res.status(404).json({ message: "Computer not found" });
             }
             res.status(200).json(computer);
         } catch (error) {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error " + error });
         }
     }
 
@@ -61,7 +61,7 @@ class ComputerController {
             const computers = await computerService.getByCategory(category as ComputerCategory);
             res.status(200).json(computers);
         } catch (error) {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 
@@ -87,7 +87,7 @@ class ComputerController {
             if (error instanceof ReferenceError) {
                 res.status(400).json({ message: error.message });
             }
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 
@@ -113,7 +113,7 @@ class ComputerController {
             if (error instanceof ReferenceError) {
                 res.status(400).json({ message: error.message });
             }
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 
@@ -130,7 +130,7 @@ class ComputerController {
             if (error instanceof ReferenceError) {
                 res.status(400).json({ message: error.message });
             }
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal server error: " + error });
         }
     }
 }
