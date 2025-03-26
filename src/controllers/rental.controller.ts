@@ -13,7 +13,7 @@ class RentalController {
                 res.status(400).json({ message: "Invalid rental data" });
                 return;
             }
-    
+            console.log("Datos recibidos en el controlador:", rentalData);
             const rental = await rentalService.create(rentalData);
             res.status(201).json(rental);
         } catch (error) {
