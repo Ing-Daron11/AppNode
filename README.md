@@ -46,6 +46,9 @@ yarn dev
 ```
 La aplicación estará disponible en: `http://localhost:3000`
 
+### Endpoints del Módulo de Usuarios
+
+
 | Método | Endpoint         | Descripción | Protegido |
 |--------|----------------|-------------|-----------|
 | GET    | `/users/`       | Listar todos los usuarios | ✅ ADMIN |
@@ -55,6 +58,20 @@ La aplicación estará disponible en: `http://localhost:3000`
 | GET    | `/users/:id`    | Obtener usuario por ID | ✅ ADMIN |
 | PUT    | `/users/:id`    | Actualizar usuario | ✅ ADMIN |
 | DELETE | `/users/:id`    | Eliminar usuario | ✅ ADMIN |
+
+### Endpoints del Módulo de Computadores
+
+La siguiente tabla describe los endpoints disponibles para la gestión de computadores en la API.
+
+| **Método** | **Endpoint**               | **Descripción**                               | **Protegido** |
+|------------|---------------------------|----------------------------------------------|--------------|
+| **GET**    | `/computer/`               | Listar todos los computadores               | ✅ Requiere autenticación |
+| **POST**   | `/computer/`               | Crear un computador                         | ✅ Requiere rol de ADMIN |
+| **GET**    | `/computer/:id`            | Obtener un computador por ID                | ✅ Requiere autenticación |
+| **GET**    | `/computer/category/:category` | Obtener computadores por categoría     | ✅ Requiere autenticación |
+| **PUT**    | `/computer/:id`            | Actualizar un computador                    | ✅ Requiere rol de ADMIN |
+| **PATCH**  | `/computer/:id/status`     | Actualizar el estado de un computador       | ✅ Requiere rol de ADMIN |
+| **DELETE** | `/computer/:id`            | Eliminar un computador                      | ✅ Requiere rol de ADMIN |
 
 
 ## 🚀 Despliegue en Vercel
