@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = handler;
 //let express = require("express");
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -28,3 +29,6 @@ app.get('/notfound', (req, res) => {
 connectionDB_1.db.then(() => app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 }));
+function handler(req, res) {
+    res.status(200).json({ message: "¡Servidor funcionando en Vercel!" });
+}

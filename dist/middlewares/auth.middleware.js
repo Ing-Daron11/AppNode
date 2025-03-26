@@ -46,8 +46,10 @@ const auth = (req, res, next) => {
         token = token.replace("Bearer ", "");
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || "secret");
         req.body.loggedUser = decoded; //Guardo el usuario decodificado en el body de la request 
-        console.log(decoded);
-        req.params.id = decoded.user.id;
+        // console.log(decoded);
+        // console.log("Authenticated User:", req.body.loggedUser);
+        // req.params.id = decoded.user.id;
+        // console.log(req.params.id)
         next();
     }
     catch (error) {

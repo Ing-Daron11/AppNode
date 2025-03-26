@@ -3,6 +3,9 @@ import express, {Express, Request, Response} from 'express';
 import dotenv from 'dotenv';
 import {userRouter, postRouter, computerRouter, rentalRouter} from './routes';
 import { db } from "./lib/connectionDB";
+import { VercelRequest, VercelResponse } from '@vercel/node';
+
+
 
 dotenv.config();
 
@@ -33,3 +36,7 @@ db.then( () =>
         console.log(`Server is running on port ${port}`);
     } )
 );
+
+export default function handler(req: VercelRequest, res: VercelResponse) {
+    res.status(200).json({ message: "¡Servidor funcionando en Vercel!" });
+}

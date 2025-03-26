@@ -42,22 +42,22 @@ class ComputerController {
                 res.status(200).json(computers);
             }
             catch (error) {
-                res.status(500).json({ message: "Internal server error" });
+                res.status(500).json({ message: "Internal server error: " + error });
             }
         });
     }
     getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
-                const computer = yield services_1.computerService.getById(id);
+                const computerId = req.params.id;
+                const computer = yield services_1.computerService.getById(computerId);
                 if (!computer) {
                     res.status(404).json({ message: "Computer not found" });
                 }
                 res.status(200).json(computer);
             }
             catch (error) {
-                res.status(500).json({ message: "Internal server error" });
+                res.status(500).json({ message: "Internal server error " + error });
             }
         });
     }
@@ -74,7 +74,7 @@ class ComputerController {
                 res.status(200).json(computers);
             }
             catch (error) {
-                res.status(500).json({ message: "Internal server error" });
+                res.status(500).json({ message: "Internal server error: " + error });
             }
         });
     }
@@ -99,7 +99,7 @@ class ComputerController {
                 if (error instanceof ReferenceError) {
                     res.status(400).json({ message: error.message });
                 }
-                res.status(500).json({ message: "Internal server error" });
+                res.status(500).json({ message: "Internal server error: " + error });
             }
         });
     }
@@ -124,7 +124,7 @@ class ComputerController {
                 if (error instanceof ReferenceError) {
                     res.status(400).json({ message: error.message });
                 }
-                res.status(500).json({ message: "Internal server error" });
+                res.status(500).json({ message: "Internal server error: " + error });
             }
         });
     }
@@ -142,7 +142,7 @@ class ComputerController {
                 if (error instanceof ReferenceError) {
                     res.status(400).json({ message: error.message });
                 }
-                res.status(500).json({ message: "Internal server error" });
+                res.status(500).json({ message: "Internal server error: " + error });
             }
         });
     }
