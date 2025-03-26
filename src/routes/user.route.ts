@@ -12,5 +12,5 @@ userRouter.get("/profile", auth, userController.get); //No protegida
 // debido a que el endpoint /login era interpretado como un id y arrojaba el error ObjectId.
 userRouter.post("/login", userController.login); //No protegida
 userRouter.get("/:id", auth, authorizeRole("ADMIN"), userController.get); //Protegida
-userRouter.put("/:id", auth, authorizeRole("ADMIN"), userController.update); //Protegida
+userRouter.put("/:id", auth, authorizeRole("ADMIN"), validateSchema(userSchema),userController.update); //Protegida
 userRouter.delete("/:id", auth, authorizeRole("ADMIN"), userController.delete); //Protegida
