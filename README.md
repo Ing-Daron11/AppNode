@@ -73,12 +73,20 @@ La siguiente tabla describe los endpoints disponibles para la gestión de comput
 | **PATCH**  | `/computer/:id/status`     | Actualizar el estado de un computador       | ✅ Requiere rol de ADMIN |
 | **DELETE** | `/computer/:id`            | Eliminar un computador                      | ✅ Requiere rol de ADMIN |
 
+### Endpoints del Módulo de Renta
+
+| Método | Endpoint      | Descripción                     | Protegido |
+|--------|-------------|---------------------------------|-----------|
+| GET    | `/rental/`   | Listar todos los alquileres    | ✅ |
+| POST   | `/rental/`   | Crear un alquiler             | ✅  |
+| GET    | `/rental/:id` | Obtener un alquiler por ID    | ✅ |
+| PUT    | `/rental/:id` | Actualizar un alquiler       | ✅  |
+| DELETE | `/rental/:id` | Eliminar un alquiler         | ✅  |
+
+
 
 ## 🚀 Despliegue en Vercel
-Cada `push` a la rama `main` despliega automáticamente en Vercel. Si necesitas desplegar manualmente:
-```sh
-vercel --prod
-```
+Cada `push` a la rama `main` despliega automáticamente en Vercel. 
 
 🔗 **URL de producción**: [https://app-node.vercel.app](https://app-node-b27w2x1mn-daron-mercados-projects.vercel.app/)
 
