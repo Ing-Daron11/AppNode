@@ -1,0 +1,260 @@
+{
+    "info": {
+        "_postman_id": "d9ecafe8-0f16-4c7d-9974-fa9a3269080f",
+        "name": "Computers AppNode",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "Login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/user/login",
+                    "path": [
+                        "user",
+                        "login"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n    \"email\": \"david_Malte@gmail.com\",\n    \"password\": \"Malte123\"\n}"
+                }
+            }
+        },
+        {
+            "name": "CreateComputer",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/computer",
+                    "path": [
+                        "computer"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n    \"name\": \"MacBook Pro M2\",\n    \"category\": \"Office\",\n    \"pricePerDay\": 25\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ0NTc0LCJleHAiOjE3NDI5NDgxNzR9.seyMM4VIzxGCPYTMve7W8MIix2xJF5XkuQpPsW229rs",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GetAllComputer",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/computer",
+                    "path": [
+                        "computer"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ0NTc0LCJleHAiOjE3NDI5NDgxNzR9.seyMM4VIzxGCPYTMve7W8MIix2xJF5XkuQpPsW229rs",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GetComputerWithID",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/computer/67e31e9774d8083da899ddf6",
+                    "path": [
+                        "computer",
+                        "67e31e9774d8083da899ddf6"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ2MzAzLCJleHAiOjE3NDI5NDk5MDN9.vBJg634T4C8ZOzP3ImgiItKhy-43V9sKG9g4oL6A1VU",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GetComputersbyCategory",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/computer/category/Office",
+                    "path": [
+                        "computer",
+                        "category",
+                        "Office"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ2MzAzLCJleHAiOjE3NDI5NDk5MDN9.vBJg634T4C8ZOzP3ImgiItKhy-43V9sKG9g4oL6A1VU",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "UpdateComputer",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/computer/67e320c143d298474019c1c1",
+                    "path": [
+                        "computer",
+                        "67e320c143d298474019c1c1"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n    \"name\": \"ASUS ROG Strix\",\n    \"category\": \"Gamer\",\n    \"pricePerDay\": 2500\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ0NTc0LCJleHAiOjE3NDI5NDgxNzR9.seyMM4VIzxGCPYTMve7W8MIix2xJF5XkuQpPsW229rs",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "UpdateComputerStatus",
+            "request": {
+                "method": "PATCH",
+                "url": {
+                    "raw": "http://localhost:3000/computer/67e320c143d298474019c1c1/status",
+                    "path": [
+                        "computer",
+                        "67e320c143d298474019c1c1",
+                        "status"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n    \"status\": \"Rented\"\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ0NTc0LCJleHAiOjE3NDI5NDgxNzR9.seyMM4VIzxGCPYTMve7W8MIix2xJF5XkuQpPsW229rs",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "DeleteComputer",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/computer/67e31e9774d8083da899ddf6",
+                    "path": [
+                        "computer",
+                        "67e31e9774d8083da899ddf6"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTQ0NTc0LCJleHAiOjE3NDI5NDgxNzR9.seyMM4VIzxGCPYTMve7W8MIix2xJF5XkuQpPsW229rs",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
