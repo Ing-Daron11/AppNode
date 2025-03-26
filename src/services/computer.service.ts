@@ -35,7 +35,9 @@ class ComputerService {
 
     public async getById(id: string): Promise<ComputerDocument | null> {
         try {
-            return await ComputerModel.findById(id);
+            const computer = await ComputerModel.findById(id);
+            if (!computer) throw new Error("Computer not found");
+            return computer;
         } catch (error) {
             throw new Error("Internal server error: " + error);
         }
