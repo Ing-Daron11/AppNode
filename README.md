@@ -56,6 +56,15 @@ La aplicación estará disponible en: `http://localhost:3000`
 | PUT    | `/users/:id`    | Actualizar usuario | ✅ ADMIN |
 | DELETE | `/users/:id`    | Eliminar usuario | ✅ ADMIN |
 
+| Método | Endpoint      | Descripción                     | Protegido |
+|--------|-------------|---------------------------------|-----------|
+| GET    | `/rental/`   | Listar todos los alquileres    | ✅ |
+| POST   | `/rental/`   | Crear un alquiler             | ✅  |
+| GET    | `/rental/:id` | Obtener un alquiler por ID    | ✅ |
+| PUT    | `/rental/:id` | Actualizar un alquiler       | ✅  |
+| DELETE | `/rental/:id` | Eliminar un alquiler         | ✅  |
+
+
 
 ## 🚀 Despliegue en Vercel
 Cada `push` a la rama `main` despliega automáticamente en Vercel. Si necesitas desplegar manualmente:
