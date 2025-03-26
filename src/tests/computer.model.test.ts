@@ -1,14 +1,21 @@
 import mongoose from "mongoose";
+import { MongoMemoryServer } from "mongodb-memory-server";
 import { ComputerModel } from "../models/computer.model";
 import { ComputerCategory, ComputerStatus } from "../constants";
 
 describe("📌 ComputerModel Unit Tests", () => {
+    let mongoServer: MongoMemoryServer;
+    jest.setTimeout(60000);  
+      
     beforeAll(async () => {
-        await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/testdb");
+        mongoServer = await MongoMemoryServer.create();
+        const mongoUri = mongoServer.getUri();
+        await mongoose.connect(mongoUri);
     });
 
     afterAll(async () => {
-        await mongoose.connection.close();
+        await mongoose.disconnect();
+        await mongoServer.stop();
     });
 
     afterEach(async () => {
