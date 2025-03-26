@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postRouter = void 0;
+const express_1 = require("express");
+exports.postRouter = (0, express_1.Router)();
+exports.postRouter.get("/", (req, res) => { res.send("OK"); });
+exports.postRouter.post("/", (req, res) => { res.send("OK"); });
+exports.postRouter.get("/:id", (req, res) => { res.send("OK"); });
+exports.postRouter.put("/:id", (req, res) => { res.send("OK"); });
+exports.postRouter.delete("/:id", (req, res) => { res.send("OK"); });
