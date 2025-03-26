@@ -8,7 +8,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 
 dotenv.config();
 
-const app: Express = express();
+export const app: Express = express();
 const port: number = process.env.PORT as any || 3000;
 
 app.use(express.json()); 

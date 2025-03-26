@@ -1,0 +1,248 @@
+{
+    "info": {
+        "_postman_id": "46b72b9a-cde5-44f5-821a-da58873edb4c",
+        "name": "User_Module",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "Login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/user/login",
+                    "path": [
+                        "user",
+                        "login"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"\",\n  \"password\": \"\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Create",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/user/",
+                    "path": [
+                        "user"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n \"name\": \"prueba\",\n    \"email\": \"prueba@gmail.com\",\n    \"password\": \"prueba123\",\n    \"role\": \"USER\"\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzBmMTFkN2FlZDRiYzE5MDBmNzdiIiwiZW1haWwiOiJkYXJvbm1lcmNhZG9nQGdtYWlsLmNvbSIsIm5hbWUiOiJEYXJvbiBNZXJjYWRvIiwicm9sZSI6IkFETUlOIn0sImlhdCI6MTc0Mjk2MjU4NCwiZXhwIjoxNzQyOTY2MTg0fQ.nUR5gVu6u0ENVc--i5QaHTgWqH1L3Ex6kxSpnV1bpzM",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/user/",
+                    "path": [
+                        "user"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzBmMTFkN2FlZDRiYzE5MDBmNzdiIiwiZW1haWwiOiJkYXJvbm1lcmNhZG9nQGdtYWlsLmNvbSIsIm5hbWUiOiJEYXJvbiBNZXJjYWRvIiwicm9sZSI6IkFETUlOIn0sImlhdCI6MTc0Mjk2MjU4NCwiZXhwIjoxNzQyOTY2MTg0fQ.nUR5gVu6u0ENVc--i5QaHTgWqH1L3Ex6kxSpnV1bpzM",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "getById",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/user/67e30f11d7aed4bc1900f77b",
+                    "path": [
+                        "user",
+                        "67e30f11d7aed4bc1900f77b"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzBmMTFkN2FlZDRiYzE5MDBmNzdiIiwiZW1haWwiOiJkYXJvbm1lcmNhZG9nQGdtYWlsLmNvbSIsIm5hbWUiOiJEYXJvbiBNZXJjYWRvIiwicm9sZSI6IkFETUlOIn0sImlhdCI6MTc0Mjk2MjU4NCwiZXhwIjoxNzQyOTY2MTg0fQ.nUR5gVu6u0ENVc--i5QaHTgWqH1L3Ex6kxSpnV1bpzM",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "getById_No_Auth",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/user/67e30f11d7aed4bc1900f77b",
+                    "path": [
+                        "user",
+                        "67e30f11d7aed4bc1900f77b"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                }
+            }
+        },
+        {
+            "name": "Update",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/user/67e33792953592354cb8ee28",
+                    "path": [
+                        "user",
+                        "67e33792953592354cb8ee28"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"prueba_actualizado\",\n  \"email\": \"prueba_actualizado@gmail.com\",\n  \"password\": \"prueba12345678\",\n  \"role\": \"TECHNICIAN\"\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzBmMTFkN2FlZDRiYzE5MDBmNzdiIiwiZW1haWwiOiJkYXJvbm1lcmNhZG9nQGdtYWlsLmNvbSIsIm5hbWUiOiJEYXJvbiBNZXJjYWRvIiwicm9sZSI6IkFETUlOIn0sImlhdCI6MTc0Mjk2MjU4NCwiZXhwIjoxNzQyOTY2MTg0fQ.nUR5gVu6u0ENVc--i5QaHTgWqH1L3Ex6kxSpnV1bpzM",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update_Sad_Path",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/user/67e33792953592354cb8ee28",
+                    "path": [
+                        "user",
+                        "67e33792953592354cb8ee28"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"prueba_actualizado:2\",\n  \"email\": \"prueba_actualizado@gmail.com\",\n  \"password\": \"112\"\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzBmMTFkN2FlZDRiYzE5MDBmNzdiIiwiZW1haWwiOiJkYXJvbm1lcmNhZG9nQGdtYWlsLmNvbSIsIm5hbWUiOiJEYXJvbiBNZXJjYWRvIiwicm9sZSI6IkFETUlOIn0sImlhdCI6MTc0Mjk2MjU4NCwiZXhwIjoxNzQyOTY2MTg0fQ.nUR5gVu6u0ENVc--i5QaHTgWqH1L3Ex6kxSpnV1bpzM",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/user/67e33792953592354cb8ee28",
+                    "path": [
+                        "user",
+                        "67e33792953592354cb8ee28"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzBmMTFkN2FlZDRiYzE5MDBmNzdiIiwiZW1haWwiOiJkYXJvbm1lcmNhZG9nQGdtYWlsLmNvbSIsIm5hbWUiOiJEYXJvbiBNZXJjYWRvIiwicm9sZSI6IkFETUlOIn0sImlhdCI6MTc0Mjk2MjU4NCwiZXhwIjoxNzQyOTY2MTg0fQ.nUR5gVu6u0ENVc--i5QaHTgWqH1L3Ex6kxSpnV1bpzM",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
