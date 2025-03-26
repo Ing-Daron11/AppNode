@@ -135,5 +135,3 @@ describe('User Endpoints', () => {
     });
 
   });
-
-});
