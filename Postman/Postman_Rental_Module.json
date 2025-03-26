@@ -1,0 +1,166 @@
+{
+    "info": {
+        "_postman_id": "34be8117-e1e9-41f3-8ebc-3f99c4036fbc",
+        "name": "rental",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "create rental",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/rental",
+                    "path": [
+                        "rental"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"userId\": \"67e31739abcbc14dfd00000f\",\n  \"computerId\": \"67e321c475e31ac6238b84f3\",\n  \"quantity\": 1,\n  \"timeLimit\": 10,\n  \"initDate\": \"2024-03-24T10:00:00Z\",\n  \"finalDate\": \"2024-03-25T10:00:00Z\"\n}\n"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTU4NjU1LCJleHAiOjE3NDI5NjIyNTV9.JrR7We1epc4aMUaXGVJ8Fig8Rf6mzFfMemkGFrc2hAI",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "get",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/rental/67e37a2ae4acebc3dcff5cd3",
+                    "path": [
+                        "rental",
+                        "67e37a2ae4acebc3dcff5cd3"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTYwNDg3LCJleHAiOjE3NDI5NjQwODd9.Txx7zdSXZ2x6NNOsih3i98f7rL8h8jahzpYZdGiBIuk",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "get all",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/rental",
+                    "path": [
+                        "rental"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTU5NDM5LCJleHAiOjE3NDI5NjMwMzl9.FeiGwTIlJZtGnw9-WwsIKGCXN5RmT-RVvnkchSfBllk",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "edit",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/rental/67e37a2ae4acebc3dcff5cd3",
+                    "path": [
+                        "rental",
+                        "67e37a2ae4acebc3dcff5cd3"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\r\n  \"quantity\": 2,\r\n  \"timeLimit\": 12,\r\n  \"initDate\": \"2024-03-26T09:00:00Z\",\r\n  \"finalDate\": \"2024-03-27T09:00:00Z\"\r\n}\r\n"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTYwNDg3LCJleHAiOjE3NDI5NjQwODd9.Txx7zdSXZ2x6NNOsih3i98f7rL8h8jahzpYZdGiBIuk",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "delete",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/rental/67e37a2ae4acebc3dcff5cd3",
+                    "path": [
+                        "rental",
+                        "67e37a2ae4acebc3dcff5cd3"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTYwNDg3LCJleHAiOjE3NDI5NjQwODd9.Txx7zdSXZ2x6NNOsih3i98f7rL8h8jahzpYZdGiBIuk",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
