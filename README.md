@@ -67,10 +67,7 @@ La aplicación estará disponible en: `http://localhost:3000`
 
 
 ## 🚀 Despliegue en Vercel
-Cada `push` a la rama `main` despliega automáticamente en Vercel. Si necesitas desplegar manualmente:
-```sh
-vercel --prod
-```
+Cada `push` a la rama `main` despliega automáticamente en Vercel. 
 
 🔗 **URL de producción**: [https://app-node.vercel.app](https://app-node-b27w2x1mn-daron-mercados-projects.vercel.app/)
 
