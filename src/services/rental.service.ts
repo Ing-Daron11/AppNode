@@ -6,35 +6,47 @@ import { ComputerStatus } from "../constants";
 class RentalService {
     public async create(rentalInput: RentalInput): Promise<RentalDocument> {
         const session = await mongoose.startSession();
-        session.startTransaction();
         try {
-            const { userId, computerId, initDate, finalDate } = rentalInput;
+            return await session.withTransaction(async () => {
+                const { userId, computerId, initDate, finalDate } = rentalInput;
 
-            if (!userId || !computerId || !initDate || !finalDate) {
-                throw new ReferenceError("All fields must be completed");
-            }
+                if (!userId || !computerId || !initDate || !finalDate) {
+                    throw new ReferenceError("All fields must be completed");
+                }
 
-            if (new Date(initDate) >= new Date(finalDate)) {
-                throw new ReferenceError("Init date must be before final date");
-            }
+                const init = new Date(initDate);
+                const final = new Date(finalDate);
 
-            const computer = await ComputerModel.findById(computerId).session(session);
-            if (!computer) throw new ReferenceError("Computer not found");
-            if (computer.status === ComputerStatus.RENTED) throw new ReferenceError("Computer is already rented");
+                if (isNaN(init.getTime()) || isNaN(final.getTime())) {
+                    throw new ReferenceError("Invalid date format");
+                }
 
-            const user = await UserModel.findById(userId).session(session);
-            if (!user) throw new ReferenceError("User not found");
+                if (init >= final) {
+                    throw new ReferenceError("Init date must be before final date");
+                }
 
-            const rental = await RentalModel.create([{ ...rentalInput }], { session });
+                const [computer, user] = await Promise.all([
+                    ComputerModel.findById(computerId).session(session),
+                    UserModel.findById(userId).session(session)
+                ]);
 
-            computer.status = ComputerStatus.RENTED;
-            await computer.save({ session });
+                if (!computer) throw new ReferenceError("Computer not found");
+                if (!user) throw new ReferenceError("User not found");
 
-            await session.commitTransaction();
-            return rental[0];
+                if (computer.status === ComputerStatus.RENTED) {
+                    throw new ReferenceError("Computer is already rented");
+                }
+
+                const rental = new RentalModel(rentalInput);
+                await rental.save({ session });
+
+                computer.status = ComputerStatus.RENTED;
+                await computer.save({ session });
+
+                return rental;
+            });
         } catch (error) {
-            await session.abortTransaction();
-            throw new Error("Error creating rental: " + error);
+            throw new Error("Error creating rental: " + (error as Error).message);
         } finally {
             session.endSession();
         }
@@ -46,58 +58,70 @@ class RentalService {
                 .populate("userId", "name email")
                 .populate("computerId", "name status");
         } catch (error) {
-            throw new Error("Error finding all rentals: " + error);
+            throw new Error("Error finding all rentals: " + (error as Error).message);
         }
     }
 
     public async getById(id: string): Promise<RentalDocument | null> {
+        console.log("Buscando alquiler con ID:", id);
         try {
             const rental = await RentalModel.findById(id)
                 .populate("userId", "name email")
                 .populate("computerId", "name status");
-            if (!rental) throw new Error("Rental not found");
+    
+            if (!rental) {
+                console.error(`No se encontró un alquiler con el ID: ${id}`);
+            } else {
+                console.log("Alquiler encontrado:", rental);
+            }
+    
             return rental;
         } catch (error) {
-            throw new Error("Error finding rental by id " + id + " " + error);
+            console.error(`Error buscando alquiler con ID: ${id} -`, error);
+            throw new Error("Error finding rental by id: " + id);
         }
     }
+    
+    
+    
 
     public async update(id: string, rentalInput: RentalInputUpdate): Promise<RentalDocument | null> {
         try {
             const rental = await RentalModel.findById(id);
-            if (!rental) throw new Error("Rental not found");
+            if (!rental) throw new ReferenceError("Rental not found");
 
-            if (rentalInput.initDate && rentalInput.finalDate) {
-                if (new Date(rentalInput.initDate) >= new Date(rentalInput.finalDate)) {
+            if (rentalInput.initDate || rentalInput.finalDate) {
+                const init = rentalInput.initDate ? new Date(rentalInput.initDate) : rental.initDate;
+                const final = rentalInput.finalDate ? new Date(rentalInput.finalDate) : rental.finalDate;
+
+                if (init >= final) {
                     throw new ReferenceError("Init date must be before final date");
                 }
             }
 
             return await RentalModel.findByIdAndUpdate(id, rentalInput, { new: true });
         } catch (error) {
-            throw new Error("Error updating rental by id " + id + " " + error);
+            throw new Error("Error updating rental by id " + id + ": " + (error as Error).message);
         }
     }
 
     public async delete(id: string): Promise<RentalDocument | null> {
         const session = await mongoose.startSession();
-        session.startTransaction();
         try {
-            const rental = await RentalModel.findById(id).session(session);
-            if (!rental) throw new Error("Rental not found");
+            return await session.withTransaction(async () => {
+                const rental = await RentalModel.findById(id).session(session);
+                if (!rental) throw new ReferenceError("Rental not found");
 
-            const computer = await ComputerModel.findById(rental.computerId).session(session);
-            if (computer) {
-                computer.status = ComputerStatus.AVAILABLE;
-                await computer.save({ session });
-            }
+                const computer = await ComputerModel.findById(rental.computerId).session(session);
+                if (computer) {
+                    computer.status = ComputerStatus.AVAILABLE;
+                    await computer.save({ session });
+                }
 
-            const deletedRental = await RentalModel.findByIdAndDelete(id, { session });
-            await session.commitTransaction();
-            return deletedRental;
+                return await RentalModel.findByIdAndDelete(id, { session });
+            });
         } catch (error) {
-            await session.abortTransaction();
-            throw new Error("Error deleting rental by id " + id + " " + error);
+            throw new Error("Error deleting rental by id " + id + ": " + (error as Error).message);
         } finally {
             session.endSession();
         }
