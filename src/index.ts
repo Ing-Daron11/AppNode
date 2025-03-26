@@ -6,7 +6,7 @@ import { db } from "./lib/connectionDB";
 
 dotenv.config();
 
-const app: Express = express();
+export const app: Express = express();
 const port: number = process.env.PORT as any || 3000;
 
 app.use(express.json()); 
