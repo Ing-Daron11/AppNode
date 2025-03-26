@@ -1,95 +1,185 @@
-import request from "supertest";
-import app from "../index"; // Asegúrate de importar correctamente tu aplicación
-import mongoose from "mongoose";
+import app from '../index';
+import request from 'supertest';
+import { getAuthToken } from './helpers/auth.helper';
 
-describe("Rental API Tests", () => {
-    let rentalId: string;
-    let token: string = "Bearer TU_TOKEN_AQUI"; // Reemplázalo con un token válido
+let authToken: string;
+let userId: string;
+let computerId: string;
+let rentalId: string;
 
-    beforeAll(async () => {
-        await mongoose.connect(process.env.TEST_DB_URL!);
+beforeAll(async () => {
+    authToken = await getAuthToken();
+
+    // Crear usuario
+    const userResponse = await request(app)
+        .post('/user')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+            name: 'Juan Pérez',
+            email: 'juan.perez@example.com',
+            password: 'SecurePass123'
+        });
+
+    userId = userResponse.body._id;
+
+    // Crear computadora
+    const computerResponse = await request(app)
+        .post('/computer')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+            name: 'MacBook Pro',
+            model: 'M1 Pro',
+            status: 'Available',
+            category: 'Design',
+            specs: 'Apple M1 Pro, 16GB RAM, 1TB SSD',
+            pricePerDay: 5000
+        });
+
+    computerId = computerResponse.body._id;
+
+    // Crear alquiler
+    const rentalResponse = await request(app)
+        .post('/rental')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+            user: userId,
+            computer: computerId,
+            startDate: '2025-04-01',
+            endDate: '2025-04-05'
+        });
+
+    rentalId = rentalResponse.body._id;
+});
+
+describe('Rental Endpoints', () => {
+
+    //----------------------------------- Happy Tests ✅ -----------------------------------
+    describe('✅ Happy Tests', () => {
+        
+        test('1️⃣ Crear un alquiler (Admin autorizado)', async () => {
+            const response = await request(app)
+                .post('/rental')
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    user: userId,
+                    computer: computerId,
+                    startDate: '2025-04-06',
+                    endDate: '2025-04-10'
+                });
+
+            expect(response.status).toBe(201);
+            expect(response.body).toHaveProperty('_id');
+            expect(response.body.user).toBe(userId);
+            expect(response.body.computer).toBe(computerId);
+        });
+
+        test('2️⃣ Obtener todos los alquileres', async () => {
+            const response = await request(app)
+                .get('/rental')
+                .set('Authorization', `Bearer ${authToken}`);
+
+            expect(response.status).toBe(200);
+            expect(Array.isArray(response.body)).toBeTruthy();
+            expect(response.body.length).toBeGreaterThan(0);
+            expect(response.body[0]).toHaveProperty('user');
+            expect(response.body[0]).toHaveProperty('computer');
+        });
+
+        test('3️⃣ Obtener un alquiler por ID', async () => {
+            const response = await request(app)
+                .get(`/rental/${rentalId}`)
+                .set('Authorization', `Bearer ${authToken}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('_id', rentalId);
+        });
+
+        test('4️⃣ Actualizar un alquiler (Admin autorizado)', async () => {
+            const response = await request(app)
+                .put(`/rental/${rentalId}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({ endDate: '2025-04-07' });
+
+            expect(response.status).toBe(200);
+            expect(response.body.endDate).toBe('2025-04-07');
+        });
+
+        test('5️⃣ Eliminar un alquiler (Admin autorizado)', async () => {
+            const response = await request(app)
+                .delete(`/rental/${rentalId}`)
+                .set('Authorization', `Bearer ${authToken}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('message', 'Rental deleted successfully');
+        });
+
     });
 
-    afterAll(async () => {
-        await mongoose.disconnect();
+    //----------------------------------- Sad Tests ❌ -----------------------------------
+    describe('❌ Sad Tests', () => {
+
+        test('1️⃣ Intentar alquilar una computadora que ya está rentada', async () => {
+            const response = await request(app)
+                .post('/rental')
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    user: userId,
+                    computer: computerId,
+                    startDate: '2025-04-06',
+                    endDate: '2025-04-10'
+                });
+
+            expect(response.status).toBe(400);
+            expect(response.body.message).toBe('Computer is not available for rent');
+        });
+
+        test('2️⃣ Intentar obtener alquileres sin autenticación', async () => {
+            const response = await request(app).get('/rental');
+            expect(response.status).toBe(401);
+        });
+
+        test('3️⃣ Crear un alquiler con fechas incorrectas', async () => {
+            const response = await request(app)
+                .post('/rental')
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    user: userId,
+                    computer: computerId,
+                    startDate: '2025-04-10',
+                    endDate: '2025-04-05'
+                });
+
+            expect(response.status).toBe(400);
+            expect(response.body.message).toBe('End date must be after start date');
+        });
+
+        test('4️⃣ Intentar obtener un alquiler inexistente', async () => {
+            const response = await request(app)
+                .get('/rental/999999999999')
+                .set('Authorization', `Bearer ${authToken}`);
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('Rental not found');
+        });
+
+        test('5️⃣ Intentar actualizar un alquiler sin permisos', async () => {
+            const response = await request(app)
+                .put(`/rental/${rentalId}`)
+                .set('Authorization', 'Bearer invalidToken')
+                .send({ endDate: '2025-04-09' });
+
+            expect(response.status).toBe(401);
+        });
+
+        test('6️⃣ Intentar eliminar un alquiler inexistente', async () => {
+            const response = await request(app)
+                .delete('/rental/999999999999')
+                .set('Authorization', `Bearer ${authToken}`);
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('Rental not found');
+        });
+
     });
 
-    // ✅ 1. Prueba para crear un Rental
-    test("POST /rentals - Should create a rental", async () => {
-        const res = await request(app)
-            .post("/rentals")
-            .set("Authorization", token)
-            .send({
-                userId: "67e31739abcbc14dfd00000f",
-                computerId: "67e321c475e31ac6238b84f3",
-                quantity: 1,
-                timeLimit: 10,
-                initDate: "2024-03-24T10:00:00Z",
-                finalDate: "2024-03-25T10:00:00Z"
-            });
-
-        expect(res.status).toBe(201);
-        expect(res.body).toHaveProperty("rental");
-        rentalId = res.body.rental._id;
-    });
-
-    // ✅ 2. Prueba para obtener un Rental
-    test("GET /rentals/:id - Should return a rental", async () => {
-        const res = await request(app)
-            .get(`/rentals/${rentalId}`)
-            .set("Authorization", token);
-
-        expect(res.status).toBe(200);
-        expect(res.body).toHaveProperty("_id", rentalId);
-    });
-
-    // ✅ 3. Prueba para actualizar un Rental
-    test("PUT /rentals/:id - Should update a rental", async () => {
-        const res = await request(app)
-            .put(`/rentals/${rentalId}`)
-            .set("Authorization", token)
-            .send({ quantity: 2 });
-
-        expect(res.status).toBe(200);
-        expect(res.body).toHaveProperty("message", "Rental updated successfully");
-    });
-
-    // ❌ 4. Prueba de error al actualizar un Rental inexistente
-    test("PUT /rentals/:id - Should return 404 for non-existent rental", async () => {
-        const res = await request(app)
-            .put(`/rentals/65f4c1e3a8bce1a2b3c45678`)
-            .set("Authorization", token)
-            .send({ quantity: 2 });
-
-        expect(res.status).toBe(404);
-        expect(res.body).toHaveProperty("message", "Rental not found");
-    });
-
-    // ✅ 5. Prueba para eliminar un Rental
-    test("DELETE /rentals/:id - Should delete a rental", async () => {
-        const res = await request(app)
-            .delete(`/rentals/${rentalId}`)
-            .set("Authorization", token);
-
-        expect(res.status).toBe(200);
-        expect(res.body).toHaveProperty("message", "Rental deleted successfully");
-    });
-
-    // ❌ 6. Prueba para eliminar un Rental inexistente
-    test("DELETE /rentals/:id - Should return 404 for non-existent rental", async () => {
-        const res = await request(app)
-            .delete(`/rentals/65f4c1e3a8bce1a2b3c45678`)
-            .set("Authorization", token);
-
-        expect(res.status).toBe(404);
-        expect(res.body).toHaveProperty("message", "Rental not found");
-    });
-
-    // ❌ 7. Prueba sin token (401 Unauthorized)
-    test("GET /rentals/:id - Should return 401 when no token is provided", async () => {
-        const res = await request(app).get(`/rentals/${rentalId}`);
-
-        expect(res.status).toBe(401);
-        expect(res.body).toEqual("Not Authorized");
-    });
 });
