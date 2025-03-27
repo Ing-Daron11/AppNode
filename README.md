@@ -53,7 +53,6 @@ La aplicación estará disponible en: `http://localhost:3000`
 |--------|----------------|-------------|-----------|
 | GET    | `/users/`       | Listar todos los usuarios | ✅ ADMIN |
 | POST   | `/users/`       | Crear un usuario | ✅ ADMIN |
-| GET    | `/users/profile` | Obtener perfil del usuario autenticado | ✅ |
 | POST   | `/users/login`  | Iniciar sesión | ❌ |
 | GET    | `/users/:id`    | Obtener usuario por ID | ✅ ADMIN |
 | PUT    | `/users/:id`    | Actualizar usuario | ✅ ADMIN |
