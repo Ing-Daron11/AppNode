@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 import { rentalService } from "../services";
 import { RentalInput, RentalInputUpdate } from "../interfaces";
+import { ComputerModel, RentalDocument, RentalModel } from "../models";
+import { ComputerStatus } from "../constants";
 
 class RentalController {
     public async create(req: Request, res: Response): Promise<void> {
@@ -13,7 +15,7 @@ class RentalController {
                 res.status(400).json({ message: "Invalid rental data" });
                 return;
             }
-    
+            console.log("Datos recibidos en el controlador:", rentalData);
             const rental = await rentalService.create(rentalData);
             res.status(201).json(rental);
         } catch (error) {
@@ -82,24 +84,22 @@ class RentalController {
 
     public async delete(req: Request, res: Response): Promise<void> {
         try {
-            const { id } = req.params;
-            if (!id) {
-                res.status(400).json({ message: "ID is required" });
-                return;
-            }
-
+            const id = req.params.id;
+    
             const rental = await rentalService.delete(id);
-            if (!rental) {
-                res.status(404).json({ message: "Rental not found" });
+            if (!rental || rental.id == null || rental.id != id) {
+                res.status(404).json({ message: `Rental with id ${id} not found` });
                 return;
             }
-
+    
             res.status(200).json({ message: "Rental deleted successfully" });
         } catch (error) {
             console.error("Error deleting rental:", error);
-            RentalController.handleError(res, error);
+            res.status(500).json({ message: "Internal server error", error: (error as Error).message });
         }
     }
+    
+    
 
     private static handleError(res: Response, error: unknown): void {
         if (error instanceof Error) {
