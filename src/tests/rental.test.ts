@@ -42,10 +42,12 @@ beforeAll(async () => {
         .post('/rental')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-            user: userId,
-            computer: computerId,
-            startDate: '2025-04-01',
-            endDate: '2025-04-05'
+            computerId: computerId,
+            userId: userId,
+            quantity: 3,
+            timeLimit: 15,
+            initDate: "2024-03-24T10:00:00Z",
+            finalDate: "2024-03-25T10:00:00Z"
         });
 
     rentalId = rentalResponse.body._id;
@@ -61,12 +63,14 @@ describe('Rental Endpoints', () => {
                 .post('/rental')
                 .set('Authorization', `Bearer ${authToken}`)
                 .send({
-                    user: userId,
-                    computer: computerId,
-                    startDate: '2025-04-06',
-                    endDate: '2025-04-10'
+                    computerId: computerId,
+                    userId: userId,
+                    quantity: 3,
+                    timeLimit: 15,
+                    initDate: new Date(),
+                    finalDate: "2024-05-25T10:00:00Z"
                 });
-
+            
             expect(response.status).toBe(201);
             expect(response.body).toHaveProperty('_id');
             expect(response.body.user).toBe(userId);
@@ -123,10 +127,12 @@ describe('Rental Endpoints', () => {
                 .post('/rental')
                 .set('Authorization', `Bearer ${authToken}`)
                 .send({
-                    user: userId,
-                    computer: computerId,
-                    startDate: '2025-04-06',
-                    endDate: '2025-04-10'
+                    computerId: computerId,
+                    userId: userId,
+                    quantity: 4,
+                    timeLimit: 25,
+                    initDate: "2024-03-24T10:00:00Z",
+                    finalDate: "2024-03-25T10:00:00Z"
                 });
 
             expect(response.status).toBe(400);
@@ -143,10 +149,12 @@ describe('Rental Endpoints', () => {
                 .post('/rental')
                 .set('Authorization', `Bearer ${authToken}`)
                 .send({
-                    user: userId,
-                    computer: computerId,
-                    startDate: '2025-04-10',
-                    endDate: '2025-04-05'
+                    computerId: computerId,
+                    userId: userId,
+                    quantity: 3,
+                    timeLimit: 15,
+                    initDate: "2024-03-24T10:00:00Z",
+                    finalDate: "2024-03-22T10:00:00Z"
                 });
 
             expect(response.status).toBe(400);

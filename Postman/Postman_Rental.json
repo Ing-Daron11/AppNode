@@ -1,0 +1,257 @@
+{
+    "info": {
+        "_postman_id": "3bad166f-f353-4482-be8a-e4e8703b23b2",
+        "name": "rental",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/user/login",
+                    "path": [
+                        "user",
+                        "login"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"david_Malte@gmail.com\",\n  \"password\": \"Malte123\"\n}"
+                }
+            }
+        },
+        {
+            "name": "create computer",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/computer",
+                    "path": [
+                        "computer"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"Lenovo\",\n  \"model\": \"ROG\",\n  \"status\": \"Available\",\n  \"category\": \"Office\",\n  \"specs\": \"Intel i9, 16GB RAM, RTX 4090\",\n  \"pricePerDay\": 3000\n}\n"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzliNTE4ODBmMDQwN2M1Y2UwNjMxIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTk0MjU1LCJleHAiOjE3NDI5OTc4NTV9.YKM8brtmfB5wlUjD0tHhU9YHJCr1CdO6tYBAa7uefUc",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "get computer by id",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/computer/67e3fb9540a7a8480f042e3e",
+                    "path": [
+                        "computer",
+                        "67e3fb9540a7a8480f042e3e"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzliNTE4ODBmMDQwN2M1Y2UwNjMxIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTk0MjU1LCJleHAiOjE3NDI5OTc4NTV9.YKM8brtmfB5wlUjD0tHhU9YHJCr1CdO6tYBAa7uefUc",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "create rental",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/rental",
+                    "path": [
+                        "rental"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"userId\": \"67e39b51880f0407c5ce0631\",\n  \"computerId\": \"67e3fb9540a7a8480f042e3e\",\n  \"quantity\": 1,\n  \"timeLimit\": 10,\n  \"initDate\": \"2024-03-24T10:00:00Z\",\n  \"finalDate\": \"2024-03-25T10:00:00Z\"\n}\n"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzliNTE4ODBmMDQwN2M1Y2UwNjMxIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTk0MjU1LCJleHAiOjE3NDI5OTc4NTV9.YKM8brtmfB5wlUjD0tHhU9YHJCr1CdO6tYBAa7uefUc",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "get",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/rental/67e39c3c25c61520755c13c8",
+                    "path": [
+                        "rental",
+                        "67e39c3c25c61520755c13c8"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzliNTE4ODBmMDQwN2M1Y2UwNjMxIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTY5ODUzLCJleHAiOjE3NDI5NzM0NTN9.OiBweVISydWUvSUwhbUAneVCWTlb20qyV0QRi87rP3o",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "get all",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/rental",
+                    "path": [
+                        "rental"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzliNTE4ODBmMDQwN2M1Y2UwNjMxIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTY5ODUzLCJleHAiOjE3NDI5NzM0NTN9.OiBweVISydWUvSUwhbUAneVCWTlb20qyV0QRi87rP3o",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "edit",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/rental/67e37a2ae4acebc3dcff5cd3",
+                    "path": [
+                        "rental",
+                        "67e37a2ae4acebc3dcff5cd3"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\r\n  \"quantity\": 2,\r\n  \"timeLimit\": 12,\r\n  \"initDate\": \"2024-03-26T09:00:00Z\",\r\n  \"finalDate\": \"2024-03-27T09:00:00Z\"\r\n}\r\n"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTYwNDg3LCJleHAiOjE3NDI5NjQwODd9.Txx7zdSXZ2x6NNOsih3i98f7rL8h8jahzpYZdGiBIuk",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "delete",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/rental/67e37a2ae4acebc3dcff5cd3",
+                    "path": [
+                        "rental",
+                        "67e37a2ae4acebc3dcff5cd3"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdlMzE3MzlhYmNiYzE0ZGZkMDAwMDBmIiwiZW1haWwiOiJkYXZpZF9NYWx0ZUBnbWFpbC5jb20iLCJuYW1lIjoiRGF2aWQgTWFsdGUiLCJyb2xlIjoiQURNSU4ifSwiaWF0IjoxNzQyOTYwNDg3LCJleHAiOjE3NDI5NjQwODd9.Txx7zdSXZ2x6NNOsih3i98f7rL8h8jahzpYZdGiBIuk",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

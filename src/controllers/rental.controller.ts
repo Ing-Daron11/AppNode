@@ -113,7 +113,7 @@ class RentalController {
                 return;
             }
     
-            console.error("Unhandled error:", error.message);
+            console.error("Unhandled error:", error);
             res.status(500).json({ message: "Internal server error", error: error.message });
         } else {
             console.error("Unknown error:", error);

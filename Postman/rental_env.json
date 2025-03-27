@@ -1,0 +1,20 @@
+{
+    "id": "rental_env",
+    "values": [
+        {
+            "key": "auth_token",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "computer_id",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "rental_id",
+            "value": "",
+            "enabled": true
+        }
+    ]
+}

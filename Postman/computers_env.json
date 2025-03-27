@@ -1,0 +1,25 @@
+{
+    "id": "computers_env_fixed",
+    "values": [
+        {
+            "key": "auth_token",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "computer_id",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "admin_email",
+            "value": "david_Malte@gmail.com",
+            "enabled": true
+        },
+        {
+            "key": "admin_password",
+            "value": "Malte123",
+            "enabled": true
+        }
+    ]
+}

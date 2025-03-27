@@ -1,0 +1,231 @@
+{
+    "info": {
+        "name": "User_Module_Final",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Login - Get Token",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/user/login",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"david_Malte@gmail.com\",\n  \"password\": \"Malte123\"\n}"
+                },
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "// Primero verifica que la respuesta sea exitosa",
+                            "pm.test(\"Login exitoso\", function() {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "",
+                            "// Intenta obtener el token de diferentes formas comunes",
+                            "var jsonData = pm.response.json();",
+                            "var token = jsonData.token || jsonData.access_token || jsonData.data.token;",
+                            "",
+                            "// Guarda el token en la variable de entorno",
+                            "if (token) {",
+                            "    pm.environment.set('auth_token', token);",
+                            "    console.log('Token obtenido:', token);",
+                            "    ",
+                            "    // Intenta obtener el ID del usuario también",
+                            "    var userId = jsonData.user?.id || jsonData.userId || jsonData.data?.user?.id;",
+                            "    if (userId) {",
+                            "        pm.environment.set('current_user_id', userId);",
+                            "        console.log('User ID obtenido:', userId);",
+                            "    }",
+                            "} else {",
+                            "    console.log('Estructura de respuesta:', JSON.stringify(jsonData, null, 2));",
+                            "    throw new Error('No se pudo obtener el token de la respuesta');",
+                            "}"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Verify Token",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/user/me",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Token válido\", function() {",
+                            "    pm.response.to.have.status(200);",
+                            "    console.log('Token verification response:', pm.response.text());",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Create Test User",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/user",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser_{{current_user_id}}@example.com\",\n  \"password\": \"Test1234\",\n  \"role\": \"USER\"\n}"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Usuario creado\", function() {",
+                            "    pm.response.to.have.status(201);",
+                            "    var jsonData = pm.response.json();",
+                            "    pm.environment.set('new_user_id', jsonData._id);",
+                            "    console.log('Nuevo usuario ID:', jsonData._id);",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Get All Users",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/user",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Lista de usuarios obtenida\", function() {",
+                            "    pm.response.to.have.status(200);",
+                            "    pm.expect(pm.response.json()).to.be.an('array');",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Get User By ID",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/user/{{new_user_id}}",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Usuario obtenido por ID\", function() {",
+                            "    pm.response.to.have.status(200);",
+                            "    pm.expect(pm.response.json()._id).to.equal(pm.environment.get('new_user_id'));",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "6. Update User",
+            "request": {
+                "method": "PUT",
+                "url": "http://localhost:3000/user/{{new_user_id}}",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Updated Test User\",\n  \"email\": \"updated_{{current_user_id}}@example.com\",\n  \"password\": \"Updated1234\"\n}"
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Usuario actualizado\", function() {",
+                            "    pm.response.to.have.status(200);",
+                            "    pm.expect(pm.response.json().name).to.equal(\"Updated Test User\");",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "7. Delete User",
+            "request": {
+                "method": "DELETE",
+                "url": "http://localhost:3000/user/{{new_user_id}}",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{auth_token}}"
+                    }
+                ]
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Usuario eliminado\", function() {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

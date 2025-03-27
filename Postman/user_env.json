@@ -1,0 +1,20 @@
+{
+    "id": "user_env_final",
+    "values": [
+        {
+            "key": "auth_token",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "current_user_id",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "new_user_id",
+            "value": "",
+            "enabled": true
+        }
+    ]
+}

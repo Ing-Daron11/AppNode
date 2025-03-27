@@ -1,0 +1,217 @@
+{
+    "info": {
+        "_postman_id": "3bad166f-f353-4482-be8a-e4e8703b23b2",
+        "name": "rental_automated",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/user/login",
+                    "path": ["user", "login"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {"raw": {"language": "json"}},
+                    "raw": "{\n  \"email\": \"david_Malte@gmail.com\",\n  \"password\": \"Malte123\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('auth_token', jsonData.token);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "create computer",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/computer",
+                    "path": ["computer"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {"raw": {"language": "json"}},
+                    "raw": "{\n  \"name\": \"Automated_Computer\",\n  \"model\": \"Automated_Model\",\n  \"status\": \"Available\",\n  \"category\": \"Test\",\n  \"specs\": \"Test Specs\",\n  \"pricePerDay\": 100\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "{{auth_token}}",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('computer_id', jsonData._id);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "create rental",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/rental",
+                    "path": ["rental"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {"raw": {"language": "json"}},
+                    "raw": "{\n  \"userId\": \"67e39b51880f0407c5ce0631\",\n  \"computerId\": \"{{computer_id}}\",\n  \"quantity\": 1,\n  \"timeLimit\": 10,\n  \"initDate\": \"2024-03-24T10:00:00Z\",\n  \"finalDate\": \"2024-03-25T10:00:00Z\"\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "{{auth_token}}",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "var jsonData = pm.response.json();",
+                            "pm.environment.set('rental_id', jsonData._id);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "get rental by id",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/rental/{{rental_id}}",
+                    "path": ["rental", "{{rental_id}}"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "{{auth_token}}",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "get all rentals",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:3000/rental",
+                    "path": ["rental"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "{{auth_token}}",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "update rental",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:3000/rental/{{rental_id}}",
+                    "path": ["rental", "{{rental_id}}"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {"raw": {"language": "json"}},
+                    "raw": "{\r\n  \"quantity\": 2,\r\n  \"timeLimit\": 12,\r\n  \"initDate\": \"2024-03-26T09:00:00Z\",\r\n  \"finalDate\": \"2024-03-27T09:00:00Z\"\r\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "{{auth_token}}",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "delete rental",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:3000/rental/{{rental_id}}",
+                    "path": ["rental", "{{rental_id}}"],
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "3000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "{{auth_token}}",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
