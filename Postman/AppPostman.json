@@ -1,0 +1,998 @@
+{
+    "info": {
+        "_postman_id": "integrated-collection",
+        "name": "AppNode Full Integration - Corregido",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": "Colección corregida con manejo adecuado de rentals"
+    },
+    "item": [
+        {
+            "name": "0. Environment Setup",
+            "item": [
+                {
+                    "name": "Set Environment Variables",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.environment.unset(\"auth_token\");",
+                                    "pm.environment.unset(\"current_user_id\");",
+                                    "pm.environment.unset(\"test_user_id\");",
+                                    "pm.environment.unset(\"computer_id\");",
+                                    "pm.environment.unset(\"computer_id_for_rental\");",
+                                    "pm.environment.unset(\"rental_id\");",
+                                    "pm.environment.set(\"base_url\", \"http://localhost:3000\");",
+                                    "pm.environment.set(\"admin_email\", \"david_Malte@gmail.com\");",
+                                    "pm.environment.set(\"admin_password\", \"Malte123\");",
+                                    "pm.environment.set(\"test_user_email\", \"testuser_\" + Math.floor(Math.random() * 10000) + \"@example.com\");",
+                                    "pm.environment.set(\"computer_name\", \"Comp_\" + Math.floor(Math.random() * 10000));",
+                                    "console.log('Environment variables set');"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/",
+                            "host": ["{{base_url}}"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1. User Module",
+            "item": [
+                {
+                    "name": "1.1 User Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["user", "login"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"david_Malte@gmail.com\",\n  \"password\": \"Malte123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Login successful\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.token || jsonData.user.token).to.exist;",
+                                    "    var token = jsonData.token || jsonData.user.token;",
+                                    "    pm.environment.set(\"auth_token\", token);",
+                                    "    pm.environment.set(\"current_user_id\", jsonData.user?.id || jsonData.id);",
+                                    "    console.log('Token stored:', token);",
+                                    "    console.log('User ID stored:', pm.environment.get(\"current_user_id\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "1.2 Create Test User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/",
+                            "host": ["{{base_url}}"],
+                            "path": ["user"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"{{test_user_email}}\",\n  \"password\": \"Test1234\",\n  \"role\": \"USER\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"User created\", function() {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"test_user_id\", jsonData._id);",
+                                    "    console.log('Test user ID:', jsonData._id);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "1.3 Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/",
+                            "host": ["{{base_url}}"],
+                            "path": ["user"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Users retrieved\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()).to.be.an('array');",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "1.4 Get User By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/{{test_user_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["user", "{{test_user_id}}"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"User retrieved by ID\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()._id).to.equal(pm.environment.get(\"test_user_id\"));",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "1.5 Update User",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/{{test_user_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["user", "{{test_user_id}}"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Updated Test User\",\n  \"email\": \"updated_{{test_user_email}}\",\n  \"password\": \"Updated1234\",\n  \"role\": \"TECHNICIAN\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"User updated\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json().name).to.equal(\"Updated Test User\");",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "1.6 Delete User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/{{test_user_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["user", "{{test_user_id}}"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"User deleted\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "2. Computers Module",
+            "item": [
+                {
+                    "name": "2.1 Create Computer",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"{{computer_name}}\",\n  \"model\": \"ROG\",\n  \"status\": \"Available\",\n  \"category\": \"Office\",\n  \"specs\": \"Intel i9, 16GB RAM, RTX 4090\",\n  \"pricePerDay\": 3000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Computer created\", function() {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"computer_id\", jsonData._id);",
+                                    "    console.log('Computer ID:', jsonData._id);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "2.2 Get Computer By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer/{{computer_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer", "{{computer_id}}"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Computer retrieved\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()._id).to.equal(pm.environment.get(\"computer_id\"));",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "2.3 Get All Computers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"All computers retrieved\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()).to.be.an('array');",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "2.4 Get Computers by Category",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer/category/Office",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer", "category", "Office"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Computers by category retrieved\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()).to.be.an('array');",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "2.5 Update Computer",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer/{{computer_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer", "{{computer_id}}"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"{{computer_name}}_Updated\",\n  \"category\": \"Gamer\",\n  \"pricePerDay\": 2500\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Computer updated\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json().name).to.equal(pm.environment.get(\"computer_name\") + \"_Updated\");",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "2.6 Update Computer Status",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer/{{computer_id}}/status",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer", "{{computer_id}}", "status"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"Rented\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Computer status updated\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json().status).to.equal(\"Rented\");",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "    // Create a separate computer for rental tests",
+                                    "    pm.sendRequest({",
+                                    "        url: pm.environment.get(\"base_url\") + '/computer',",
+                                    "        method: 'POST',",
+                                    "        header: {",
+                                    "            'Content-Type': 'application/json',",
+                                    "            'Authorization': 'Bearer ' + pm.environment.get(\"auth_token\")",
+                                    "        },",
+                                    "        body: {",
+                                    "            mode: 'raw',",
+                                    "            raw: JSON.stringify({",
+                                    "                name: pm.environment.get(\"computer_name\") + '_ForRental',",
+                                    "                model: 'ROG',",
+                                    "                status: 'Available',",
+                                    "                category: 'Office',",
+                                    "                specs: 'Intel i9, 16GB RAM, RTX 4090',",
+                                    "                pricePerDay: 3000",
+                                    "            })",
+                                    "        }",
+                                    "    }, function (err, res) {",
+                                    "        if (err) {",
+                                    "            console.log('Error creating computer for rental:', err);",
+                                    "        } else {",
+                                    "            pm.environment.set(\"computer_id_for_rental\", res.json()._id);",
+                                    "            console.log('Computer for rental created with ID:', res.json()._id);",
+                                    "        }",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "2.7 Delete Computer",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer/{{computer_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer", "{{computer_id}}"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Computer deleted\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    console.log('Computer with ID ' + pm.environment.get(\"computer_id\") + ' was deleted');",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "3. Rental Module",
+            "item": [
+                {
+                    "name": "3.1 Create Rental",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/rental",
+                            "host": ["{{base_url}}"],
+                            "path": ["rental"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"{{current_user_id}}\",\n  \"computerId\": \"{{computer_id_for_rental}}\",\n  \"quantity\": 1,\n  \"timeLimit\": 10,\n  \"initDate\": \"2024-03-24T10:00:00Z\",\n  \"finalDate\": \"2024-03-25T10:00:00Z\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Rental created\", function() {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"rental_id\", jsonData._id);",
+                                    "    console.log('Rental ID:', jsonData._id);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "3.2 Get Rental By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/rental/{{rental_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["rental", "{{rental_id}}"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Rental retrieved\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()._id).to.equal(pm.environment.get(\"rental_id\"));",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "3.3 Get All Rentals",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/rental",
+                            "host": ["{{base_url}}"],
+                            "path": ["rental"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"All rentals retrieved\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json()).to.be.an('array');",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "3.4 Update Rental",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/rental/{{rental_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["rental", "{{rental_id}}"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"quantity\": 2,\n  \"timeLimit\": 12,\n  \"initDate\": \"2024-03-26T09:00:00Z\",\n  \"finalDate\": \"2024-03-27T09:00:00Z\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Rental updated\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    pm.expect(pm.response.json().quantity).to.equal(2);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "3.5 Delete Rental",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/rental/{{rental_id}}",
+                            "host": ["{{base_url}}"],
+                            "path": ["rental", "{{rental_id}}"]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Rental deleted\", function() {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "    // Clean up - delete the rental computer",
+                                    "    pm.sendRequest({",
+                                    "        url: pm.environment.get(\"base_url\") + '/computer/' + pm.environment.get(\"computer_id_for_rental\"),",
+                                    "        method: 'DELETE',",
+                                    "        header: {",
+                                    "            'Content-Type': 'application/json',",
+                                    "            'Authorization': 'Bearer ' + pm.environment.get(\"auth_token\")",
+                                    "        }",
+                                    "    }, function (err, res) {",
+                                    "        if (err) {",
+                                    "            console.log('Error deleting rental computer:', err);",
+                                    "        } else {",
+                                    "            console.log('Rental computer deleted successfully');",
+                                    "        }",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "console.log('Collection started');"
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "console.log('Collection completed');"
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:3000"
+        },
+        {
+            "key": "auth_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "current_user_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "test_user_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "computer_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "computer_id_for_rental",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "computer_name",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "rental_id",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}

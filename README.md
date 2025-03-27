@@ -53,7 +53,6 @@ La aplicación estará disponible en: `http://localhost:3000`
 |--------|----------------|-------------|-----------|
 | GET    | `/users/`       | Listar todos los usuarios | ✅ ADMIN |
 | POST   | `/users/`       | Crear un usuario | ✅ ADMIN |
-| GET    | `/users/profile` | Obtener perfil del usuario autenticado | ✅ |
 | POST   | `/users/login`  | Iniciar sesión | ❌ |
 | GET    | `/users/:id`    | Obtener usuario por ID | ✅ ADMIN |
 | PUT    | `/users/:id`    | Actualizar usuario | ✅ ADMIN |
@@ -88,7 +87,7 @@ La siguiente tabla describe los endpoints disponibles para la gestión de comput
 ## 🚀 Despliegue en Vercel
 Cada `push` a la rama `main` despliega automáticamente en Vercel. 
 
-🔗 **URL de producción**: [https://app-node.vercel.app](https://app-node-b27w2x1mn-daron-mercados-projects.vercel.app/)
+🔗 **URL de producción**: [https://app-node.vercel.app](https://app-node-phi.vercel.app/)
 
 ## 👤 Autores
 - [**Daron**](https://github.com/Ing-Daron11)
