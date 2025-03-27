@@ -641,6 +641,59 @@
                     ]
                 },
                 {
+                    "name": "2.6.1 Create Additional Computer",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/computer",
+                            "host": ["{{base_url}}"],
+                            "path": ["computer"]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"{{computer_name}}_ToDelete\",\n  \"model\": \"ROG\",\n  \"status\": \"Available\",\n  \"category\": \"Office\",\n  \"specs\": \"Intel i9, 16GB RAM, RTX 4090\",\n  \"pricePerDay\": 3000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{auth_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Additional computer created for deletion\", function() {",
+                                    "    pm.response.to.have.status(201);",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"computer_id_to_delete\", jsonData._id);",
+                                    "    console.log('Computer to delete ID:', jsonData._id);",
+                                    "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "2.7 Delete Computer",
                     "request": {
                         "method": "DELETE",
@@ -651,9 +704,9 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base_url}}/computer/{{computer_id}}",
+                            "raw": "{{base_url}}/computer/{{computer_id_to_delete}}",
                             "host": ["{{base_url}}"],
-                            "path": ["computer", "{{computer_id}}"]
+                            "path": ["computer", "{{computer_id_to_delete}}"]
                         },
                         "auth": {
                             "type": "bearer",
@@ -673,7 +726,7 @@
                                 "exec": [
                                     "pm.test(\"Computer deleted\", function() {",
                                     "    pm.response.to.have.status(200);",
-                                    "    console.log('Computer with ID ' + pm.environment.get(\"computer_id\") + ' was deleted');",
+                                    "    console.log('Computer with ID ' + pm.environment.get(\"computer_id_to_delete\") + ' was deleted');",
                                     "    console.log('Current auth token:', pm.environment.get(\"auth_token\"));",
                                     "});"
                                 ],
@@ -991,6 +1044,11 @@
         },
         {
             "key": "rental_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "computer_id_to_delete",
             "value": "",
             "type": "string"
         }
