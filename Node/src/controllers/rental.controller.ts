@@ -20,9 +20,9 @@ class RentalController {
             res.status(201).json(rental);
         } catch (error) {
             RentalController.handleError(res, error); // Ya maneja el log internamente
-        }
-    }
-    
+        }8888888888888888888888888888888888888888888888888
+    }88888888888888888888888888888888888888888888888888888
+    8888888888888888
 
     public async findAll(req: Request, res: Response): Promise<void> {
         try {
